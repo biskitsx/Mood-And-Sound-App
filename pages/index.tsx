@@ -1,8 +1,16 @@
-import { useRef, useEffect, useState } from 'react';
+import Nav from '@/components/Nav';
+import SoundBox from '@/components/SoundBox';
+import { sounds } from '@/data/sounds';
+import { useRef, useState } from 'react';
 
-type AudioRef = {
+export type AudioRef = {
     wood: React.MutableRefObject<HTMLAudioElement | null>;
     lightRain: React.MutableRefObject<HTMLAudioElement | null>;
+};
+
+export type IsPlaying = {
+    wood: boolean;
+    lightRain: boolean;
 };
 
 export default function Home() {
@@ -16,37 +24,21 @@ export default function Home() {
         lightRain: false,
     });
 
-    useEffect(() => {
-        audioRefs.wood.current = new Audio('/audio/wood.mp3');
-        audioRefs.lightRain.current = new Audio('/audio/light-rain.mp3');
-    }, []);
-
-    const playAndStopSound = (type: keyof AudioRef) => {
-        const audio = audioRefs[type].current;
-        if (audio) {
-            audio.loop = !isPlaying[type];
-            isPlaying[type] ? audio.pause() : audio.play();
-            setIsPlaying((prevState) => ({ ...prevState, [type]: !prevState[type] }));
-        }
-    };
-
     return (
-        <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content text-center">
-                <div className="max-w-md">
-                    <h1 className="text-5xl font-bold">Welcome to Background Sound 🎧</h1>
+        <div className="p-3 flex flex-col gap-10 justify-center items-center">
+            <Nav />
+            <div className='w-9/12 flex flex-col gap-10 justify-center items-center'>
+                <div className='text-center'>
+                    <h1 className="text-5xl font-bold">Welcome to <span className='text-primary-focus'>Background Sound 🎧</span> </h1>
                     <p className="py-6">
-                        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti
-                        eaque aut repudiandae et a id nisi.
+                        Click to play sound and click again to stop sound.
                     </p>
-                    <div className="flex gap-10 items-center justify-center">
-                        <button onClick={() => playAndStopSound('wood')} className="btn btn-primary">
-                            {isPlaying.wood ? 'Stop Wood' : 'Play Wood'}
-                        </button>
-                        <button onClick={() => playAndStopSound('lightRain')} className="btn btn-primary">
-                            {isPlaying.lightRain ? 'Stop Rain' : 'Play Rain'}
-                        </button>
-                    </div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-10 items-center justify-center w-full">
+                    {sounds.map((sound, index) => (
+                        /* @ts-ignore */
+                        <SoundBox audioRefs={audioRefs} isPlaying={isPlaying} setIsPlaying={setIsPlaying} soundName={sound.name} src={sound.src} key={index} />
+                    ))}
                 </div>
             </div>
         </div>
