@@ -1,6 +1,9 @@
 import { AudioRef, IsPlaying } from '@/pages';
 import { useEffect } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 interface SoundBoxDTO {
     audioRefs: AudioRef;
@@ -8,12 +11,16 @@ interface SoundBoxDTO {
     setIsPlaying: React.Dispatch<React.SetStateAction<IsPlaying>>;
     soundName: keyof AudioRef;
     src: string
+    icon: IconDefinition
+    badgeName: string
 }
 
-function SoundBox({ audioRefs, isPlaying, setIsPlaying, soundName, src }: SoundBoxDTO) {
+function SoundBox({ audioRefs, isPlaying, setIsPlaying, soundName, src, icon, badgeName }: SoundBoxDTO) {
     const playAndStopSound = (type: keyof AudioRef) => {
         const audio = audioRefs[type].current;
         if (audio) {
+            // audio.volume = 0.5;
+            audio.currentTime = 0;
             audio.loop = !isPlaying[type];
             isPlaying[type] ? audio.pause() : audio.play();
             setIsPlaying((prevState) => ({ ...prevState, [type]: !prevState[type] }));
@@ -23,16 +30,19 @@ function SoundBox({ audioRefs, isPlaying, setIsPlaying, soundName, src }: SoundB
         audioRefs[soundName].current = new Audio(src);
     }, []);
 
-    const baseCSS = "rounded-xl uppercase flex flex-col justify-center items-center font-medium shadow-md bg-white w-full h-44 flex flex-col ease-in gap-1 text-lg"
     return (
-        <button onClick={() => playAndStopSound(soundName)} className={isPlaying[soundName] ? baseCSS + " bg-secondary" : baseCSS}>
-            {/* // <button onClick={() => playAndStopSound(soundName)} className={baseCSS}> */}
-            <h1 className='text-lg'>
-                {isPlaying[soundName] ? `Stop ${soundName}` : `Play ${soundName}`}
-            </h1>
-            {isPlaying[soundName] &&
-                <p><span className="loading loading-bars loading-lg"></span></p>
-            }
+        <button onClick={() => playAndStopSound(soundName)} className={isPlaying[soundName] ? 'sound-box-active sound-box relative' : 'sound-box'}>
+            <div className='w-full justify-center items-center h-full flex relative'>
+                <div className="badge absolute top-2 left-2 badge-accent">{badgeName}</div>
+
+                {
+                    isPlaying[soundName] ?
+                        <FontAwesomeIcon icon={icon} className='text-5xl animate-spin-slow ' />
+                        :
+                        <FontAwesomeIcon icon={icon} className='text-5xl' />
+                }
+            </div>
+
         </button>
     )
 }
