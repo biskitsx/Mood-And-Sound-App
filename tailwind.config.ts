@@ -13,7 +13,15 @@ const config: Config = {
                 'gradient-conic':
                     'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
             },
+            animation: {
+                'spin-slow': 'spin 2s linear infinite',
+            }
         },
+    },
+    daisyui: {
+        themes: [
+            "cupcake",
+        ],
     },
     plugins: [daisyui],
 }

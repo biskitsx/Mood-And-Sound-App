@@ -1,14 +1,59 @@
-import { useRef, useEffect, useState } from 'react';
+import Footer from '@/components/Footer';
+import Nav from '@/components/Nav';
+import SoundBox from '@/components/SoundBox';
+import { sounds } from '@/data/sounds';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
-type AudioRef = {
-    wood: React.MutableRefObject<HTMLAudioElement | null>;
+export type AudioRef = {
     lightRain: React.MutableRefObject<HTMLAudioElement | null>;
+    wind: React.MutableRefObject<HTMLAudioElement | null>;
+    campFire: React.MutableRefObject<HTMLAudioElement | null>;
+    keyboard: React.MutableRefObject<HTMLAudioElement | null>;
+    clock: React.MutableRefObject<HTMLAudioElement | null>;
+    step: React.MutableRefObject<HTMLAudioElement | null>;
+    wave: React.MutableRefObject<HTMLAudioElement | null>;
+    book: React.MutableRefObject<HTMLAudioElement | null>;
+    bird: React.MutableRefObject<HTMLAudioElement | null>;
+    guitar: React.MutableRefObject<HTMLAudioElement | null>;
+    trap: React.MutableRefObject<HTMLAudioElement | null>;
+    thunder: React.MutableRefObject<HTMLAudioElement | null>;
+    heart: React.MutableRefObject<HTMLAudioElement | null>;
+};
+
+export type IsPlaying = {
+    lightRain: boolean;
+    wind: boolean;
+    campFire: boolean;
+    keyboard: boolean;
+    clock: boolean;
+    step: boolean;
+    wave: boolean;
+    book: boolean;
+    bird: boolean;
+    guitar: boolean;
+    trap: boolean;
+    thunder: boolean;
+    heart: boolean;
+
 };
 
 export default function Home() {
     const audioRefs: AudioRef = {
-        wood: useRef(null),
+        clock: useRef(null),
         lightRain: useRef(null),
+        wind: useRef(null),
+        campFire: useRef(null),
+        keyboard: useRef(null),
+        step: useRef(null),
+        wave: useRef(null),
+        book: useRef(null),
+        bird: useRef(null),
+        guitar: useRef(null),
+        trap: useRef(null),
+        thunder: useRef(null),
+        heart: useRef(null),
+
     };
 
     const [isPlaying, setIsPlaying] = useState({
@@ -16,39 +61,29 @@ export default function Home() {
         lightRain: false,
     });
 
-    useEffect(() => {
-        audioRefs.wood.current = new Audio('/audio/wood.mp3');
-        audioRefs.lightRain.current = new Audio('/audio/light-rain.mp3');
-    }, []);
-
-    const playAndStopSound = (type: keyof AudioRef) => {
-        const audio = audioRefs[type].current;
-        if (audio) {
-            audio.loop = !isPlaying[type];
-            isPlaying[type] ? audio.pause() : audio.play();
-            setIsPlaying((prevState) => ({ ...prevState, [type]: !prevState[type] }));
-        }
-    };
-
     return (
-        <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content text-center">
-                <div className="max-w-md">
-                    <h1 className="text-5xl font-bold">Welcome to Background Sound 🎧</h1>
-                    <p className="py-6">
-                        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti
-                        eaque aut repudiandae et a id nisi.
+        <div className="flex flex-col gap-16 justify-center items-center">
+            <Nav />
+            <div className='w-9/12 flex flex-col gap-16 justify-center items-center'>
+                <div className='text-center flex flex-col gap-2'>
+                    <h1 className="text-4xl md:text-6xl font-extrabold">Welcome to <span className="rainbow"> Mood & Sound </span> 🎧</h1>
+                    {/* <Image src="/smile.webp" alt='smile' width={60} height={50} className='w-full' /> */}
+
+                    <p className='text-base-content/60 md:text-lg xl:text-2xl'>
+                        Choose your mood and enjoy!
                     </p>
-                    <div className="flex gap-10 items-center justify-center">
-                        <button onClick={() => playAndStopSound('wood')} className="btn btn-primary">
-                            {isPlaying.wood ? 'Stop Wood' : 'Play Wood'}
-                        </button>
-                        <button onClick={() => playAndStopSound('lightRain')} className="btn btn-primary">
-                            {isPlaying.lightRain ? 'Stop Rain' : 'Play Rain'}
-                        </button>
-                    </div>
+                    {/* <p className="py-6">
+                        Click to play sound and click again to stop sound.
+                    </p> */}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 items-center justify-center w-full">
+                    {sounds.map((sound, index) => (
+                        /* @ts-ignore */
+                        <SoundBox audioRefs={audioRefs} isPlaying={isPlaying} setIsPlaying={setIsPlaying} soundName={sound.name} src={sound.src} icon={sound.icon} badgeName={sound.badgeName} key={index} />
+                    ))}
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }
