@@ -20,7 +20,8 @@ const config: Config = {
     },
     daisyui: {
         themes: [
-            "cupcake",
+            "lofi",
+            // "emerald",
         ],
     },
     plugins: [daisyui],
