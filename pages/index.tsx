@@ -68,15 +68,12 @@ export default function Home() {
                 <div className='text-center flex flex-col gap-2'>
                     <h1 className="text-4xl md:text-6xl font-extrabold">Welcome to <span className="rainbow"> Mood & Sound </span> 🎧</h1>
                     {/* <Image src="/smile.webp" alt='smile' width={60} height={50} className='w-full' /> */}
-
                     <p className='text-base-content/60 md:text-lg xl:text-2xl'>
                         Choose your mood and enjoy!
                     </p>
-                    {/* <p className="py-6">
-                        Click to play sound and click again to stop sound.
-                    </p> */}
+
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 items-center justify-center w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-10 items-center justify-center w-full">
                     {sounds.map((sound, index) => (
                         /* @ts-ignore */
                         <SoundBox audioRefs={audioRefs} isPlaying={isPlaying} setIsPlaying={setIsPlaying} soundName={sound.name} src={sound.src} icon={sound.icon} badgeName={sound.badgeName} key={index} />
